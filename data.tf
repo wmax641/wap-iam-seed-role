@@ -58,6 +58,28 @@ data "aws_iam_policy_document" "iam_seed_role" {
     ]
   }
 
+  statement {
+    sid = "S3ListBucket"
+    actions = [
+      "s3:ListBucket",
+    ]
+    resources = [
+      "arn:aws:s3:::tf-${data.aws_caller_identity.current.account_id}",
+    ]
+  }
+
+  statement {
+    sid = "S3AccessTFBucket"
+    actions = [
+      "s3:CreateObject",
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+    resources = [
+      "arn:aws:s3:::tf-${data.aws_caller_identity.current.account_id}/wap-iam-*",
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
