@@ -10,7 +10,8 @@ resource "aws_iam_openid_connect_provider" "github_actions" {
 }
 
 resource "aws_iam_role" "iam_seed_role" {
-  name = "IAMSeedRole"
+  name        = "IAMSeedRole"
+  description = "Assumed by Github Actions to deploy other IAM resources"
 
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 

@@ -12,14 +12,30 @@ data "aws_iam_policy_document" "iam_seed_role" {
   }
 
   statement {
-    sid = "IAMRoles"
+    sid = "IAMRolesWithBoundary"
     actions = [
       "iam:CreateRole",
+      "iam:PutRolePermissionsBoundary",
+      "iam:*RolePolicy",
+    ]
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wap/*",
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "iam:PermissionsBoundary"
+      values = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/boundary/*",
+      ]
+    }
+  }
+
+  statement {
+    sid = "IAMRolesWithoutBoundary"
+    actions = [
       "iam:DeleteRole",
       "iam:UpdateRole",
       "iam:UpdateRoleDescription",
-      "iam:*RolePermissionsBoundary",
-      "iam:*RolePolicy",
       "iam:TagRole",
       "iam:UntagRole",
     ]
@@ -29,13 +45,27 @@ data "aws_iam_policy_document" "iam_seed_role" {
   }
 
   statement {
-    sid = "IAMUsers"
+    sid = "IAMUsersWithBoundary"
     actions = [
       "iam:CreateUser",
-      "iam:DeleteUser",
-      "iam:UpdateUser",
       "iam:*UserPermissionsBoundary",
       "iam:*UserPolicy",
+    ]
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/wap/*",
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "iam:PermissionsBoundary"
+      values = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/boundary/*",
+      ]
+    }
+  }
+  statement {
+    sid = "IAMUsersWithoutBoundary"
+    actions = [
+      "iam:UpdateUser",
       "iam:TagUser",
       "iam:UntagUser",
     ]
@@ -105,9 +135,10 @@ data "aws_iam_policy_document" "assume_role_policy" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
 
-      values = [
-        "repo:wmax641/wap-iam-*:*",
-      ]
+      values = flatten([
+        "repo:wmax641/wap-iam-accounts:environment:production",
+        data.aws_caller_identity.current.account_id == var.account_id_dev ? ["repo:wmax641/wap-iam-accounts:environment:development"] : [],
+      ])
     }
   }
 }
