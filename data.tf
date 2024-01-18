@@ -12,6 +12,17 @@ data "aws_iam_policy_document" "iam_seed_role" {
   }
 
   statement {
+    sid = "PassRole"
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wap/*",
+    ]
+  }
+
+  # Permissions to operate on roles, if a boundary is specified
+  statement {
     sid = "IAMRolesWithBoundary"
     actions = [
       "iam:CreateRole",
@@ -30,6 +41,7 @@ data "aws_iam_policy_document" "iam_seed_role" {
     }
   }
 
+  # These are the permissions for IAM Roles that don't have the boundary condition
   statement {
     sid = "IAMRolesWithoutBoundary"
     actions = [
@@ -41,6 +53,16 @@ data "aws_iam_policy_document" "iam_seed_role" {
     ]
     resources = [
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wap/*",
+    ]
+  }
+
+  statement {
+    sid = "InstanceProfile"
+    actions = [
+      "iam:*InstanceProfile",
+    ]
+    resources = [
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/wap/*",
     ]
   }
 
