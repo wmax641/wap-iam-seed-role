@@ -136,20 +136,9 @@ data "aws_iam_policy_document" "iam_seed_role" {
 
 data "aws_iam_policy_document" "permission_boundary_service" {
   statement {
-    sid    = "AllowedServices"
-    effect = "Allow"
-    actions = [
-      "apigateway:*",
-      "cloudtrail:*",
-      "dynamodb:*",
-      "ec2:*",
-      "kms:*",
-      "lambda:*",
-      "s3:*",
-      "scheduler:*",
-      "secretsmanager:*",
-      "ssm:*",
-    ]
+    sid     = "AllowedServices"
+    effect  = "Allow"
+    actions = var.allowed_services
     resources = [
       "*",
     ]
@@ -185,20 +174,9 @@ data "aws_iam_policy_document" "permission_boundary_service" {
 
 data "aws_iam_policy_document" "permission_boundary_deploy" {
   statement {
-    sid    = "AllowedServices"
-    effect = "Allow"
-    actions = [
-      "apigateway:*",
-      "cloudtrail:*",
-      "dynamodb:*",
-      "ec2:*",
-      "kms:*",
-      "lambda:*",
-      "s3:*",
-      "secretsmanager:*",
-      "scheduler:*",
-      "ssm:*",
-    ]
+    sid     = "AllowedServices"
+    effect  = "Allow"
+    actions = var.allowed_services
     resources = [
       "*",
     ]

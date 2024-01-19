@@ -8,6 +8,25 @@ variable "common_tags" {
     "repo" = "wmax641/wap-iam-seed-role"
   }
 }
+
+variable "allowed_services" {
+  type        = list(string)
+  description = "List of services to allow in boundary"
+  default = [
+    "apigateway:*",
+    "cloudtrail:*",
+    "dynamodb:*",
+    "ec2:*",
+    "ecr:*",
+    "kms:*",
+    "lambda:*",
+    "s3:*",
+    "secretsmanager:*",
+    "scheduler:*",
+    "ssm:*",
+  ]
+}
+
 variable "thumbprint_list_github" {
   description = "A list of thumbprints to trust. This may change from time to time"
   type        = list(string)
@@ -22,3 +41,4 @@ variable "account_id_dev" {
   type    = string
   default = "071440211637"
 }
+
