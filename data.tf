@@ -129,7 +129,20 @@ data "aws_iam_policy_document" "iam_seed_role" {
       "s3:PutObject",
     ]
     resources = [
-      "arn:aws:s3:::tf-${data.aws_caller_identity.current.account_id}/wap-iam-*",
+      "arn:aws:s3:::tf-${data.aws_caller_identity.current.account_id}/wap-iam-accounts",
+    ]
+  }
+
+  statement {
+    sid = "DynamoDBAccessTFTable"
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/tf-${data.aws_caller_identity.current.account_id}",
     ]
   }
 }

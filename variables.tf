@@ -13,16 +13,19 @@ variable "allowed_services" {
   type        = list(string)
   description = "List of services to allow in boundary"
   default = [
+    "acm:*",
     "apigateway:*",
     "cloudtrail:*",
     "dynamodb:*",
     "ec2:*",
     "ecr:*",
+    "events:*",
     "kms:*",
     "lambda:*",
+    "route53:*",
     "s3:*",
-    "secretsmanager:*",
     "scheduler:*",
+    "secretsmanager:*",
     "ssm:*",
   ]
 }
