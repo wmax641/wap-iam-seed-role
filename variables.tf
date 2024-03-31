@@ -20,6 +20,8 @@ variable "allowed_services" {
     "ec2:*",
     "ecr:*",
     "events:*",
+    "execute-api:*",
+    "iam:*",
     "kms:*",
     "lambda:*",
     "route53:*",
